@@ -1,3 +1,4 @@
-module.exports.sendPassword = (password) => {
-  console.log('Sending password right away!', password);
+module.exports.sendPassword = (email, password) => {
+  console.log('Sending password right away!', email, password);
+  return email;
 };
