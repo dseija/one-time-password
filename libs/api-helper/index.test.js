@@ -12,4 +12,11 @@ describe('API Helper', () => {
       expect(data.foo).toEqual('bar');
     });
   });
+
+  describe('apiResponse', () => {
+    it('should return default statusCode', () => {
+      const response = apiHelper.apiResponse();
+      expect(response.statusCode).toEqual(200);
+    });
+  });
 });
