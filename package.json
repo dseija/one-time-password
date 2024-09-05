@@ -6,7 +6,8 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "aws-sdk": "^2.1689.0"
+    "@aws-sdk/client-dynamodb": "^3.645.0",
+    "@aws-sdk/lib-dynamodb": "^3.645.0"
   },
   "devDependencies": {
     "jest": "^29.7.0"

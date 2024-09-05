@@ -4,7 +4,7 @@ describe('API Helper', () => {
   describe('apiRequestData', () => {
     it('should handle error when event is not as expected', () => {
       const data = apiHelper.apiRequestData({});
-      expect(data).toEqual(undefined);
+      expect(data).toBeUndefined();
     });
 
     it('should return event body parsed', () => {

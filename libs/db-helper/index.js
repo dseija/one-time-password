@@ -1,25 +1,19 @@
-const { DynamoDB } = require('aws-sdk');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
 const logger = require('../logger');
 
-let docClientInstance;
-
-const getInstance = () => {
-  if (!docClientInstance) docClientInstance = new DynamoDB.DocumentClient();
-
-  return docClientInstance;
-};
+let dbClient = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 const addRecord = async (tableName, recordData) => {
-  const docClient = getInstance();
   let result;
   try {
-    result = await docClient
-      .put({
+    result = await dbClient.send(
+      new PutCommand({
         Item: recordData,
         ReturnConsumedCapacity: 'TOTAL',
         TableName: tableName,
       })
-      .promise();
+    );
   } catch (e) {
     logger.log(e.stack, 'error');
   }
@@ -27,4 +21,4 @@ const addRecord = async (tableName, recordData) => {
   return result;
 };
 
-module.exports = { getInstance, addRecord };
+module.exports = { addRecord };
