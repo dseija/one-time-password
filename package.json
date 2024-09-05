@@ -5,7 +5,9 @@
   "scripts": {
     "test": "jest --coverage"
   },
-  "dependencies": {},
+  "dependencies": {
+    "aws-sdk": "^2.1689.0"
+  },
   "devDependencies": {
     "jest": "^29.7.0"
   }

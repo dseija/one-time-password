@@ -4,7 +4,7 @@ const apiRequestData = (event) => {
   try {
     return JSON.parse(event.body);
   } catch (e) {
-    logger.log(e, 'error');
+    logger.log(e.stack, 'error');
     return;
   }
 };
