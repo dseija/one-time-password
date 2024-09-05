@@ -13,6 +13,8 @@ jest.mock('@aws-sdk/client-dynamodb', () => ({
 const { getDbClient, addRecord } = require('.');
 
 describe('DB Helper', () => {
+  let mockPut;
+
   beforeEach(() => {
     mockPut = getDbClient().put;
   });
