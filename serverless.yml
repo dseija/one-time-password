@@ -1,0 +1,67 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: ${env:SLS_ORG}
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: one-time-password
+
+package:
+  patterns:
+    - '!coverage/**'
+    - '!*/**/*.test.*'
+    - '!package-lock.json'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:GetItem'
+            - 'dynamodb:DeleteItem'
+          Resource:
+            - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${env:DB_TABLE}'
+        - Effect: 'Allow'
+          Action:
+            - 'ses:SendEmail'
+            - 'ses:SendRawEmail'
+          Resource:
+            - !Sub 'arn:aws:ses:${AWS::Region}:${AWS::AccountId}:*'
+
+functions:
+  generate-password:
+    handler: services/generate-password/app.handler
+    events:
+      - http:
+          path: generate-password
+          method: post
+
+resources:
+  Resources:
+    DynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${env:DB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: expiresAt
+            AttributeType: N
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: expiresAt
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
+        TimeToLiveSpecification:
+          AttributeName: expiresAt
+          Enabled: True
+
+plugins:
+  - serverless-dotenv-plugin
