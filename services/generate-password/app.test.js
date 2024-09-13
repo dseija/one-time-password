@@ -1,9 +1,11 @@
 const { handler } = require('./app');
 const SaveData = require('./core/save-data');
 const SendPassword = require('./core/send-password');
+const TokenHelper = require('../../libs/token-helper');
 
 jest.mock('./core/save-data');
 jest.mock('./core/send-password');
+jest.mock('../../libs/token-helper');
 
 describe('GeneratePassword Service', () => {
   const EMAIL_OK = 'email@test.com';
@@ -73,12 +75,17 @@ describe('GeneratePassword Service', () => {
       const sendPasswordMock = jest
         .spyOn(SendPassword, 'sendPassword')
         .mockImplementation(() => true);
+      const getRandomTokenMock = jest
+        .spyOn(TokenHelper, 'getRandomToken')
+        .mockImplementation(() => '123456');
+
+      const password = getRandomTokenMock();
 
       const response = await handler(event);
       const body = JSON.parse(response.body);
 
       expect(saveDataMock).toHaveBeenCalled();
-      expect(sendPasswordMock).toHaveBeenCalled();
+      expect(sendPasswordMock).toHaveBeenCalledWith(EMAIL_OK, password);
       expect(typeof body.token).toEqual('string');
     });
   });
