@@ -23,7 +23,7 @@ module.exports.handler = async (event) => {
   if (!dataSaved) return apiResponse({ message: MESSAGE.ERROR }, 500);
 
   // Send password to the user (email)
-  const passwordSent = await sendPassword(password);
+  const passwordSent = await sendPassword(data.email, password);
   if (!passwordSent) return apiResponse({ message: MESSAGE.ERROR }, 500);
 
   // Returns session token

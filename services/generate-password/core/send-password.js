@@ -14,7 +14,7 @@ module.exports.sendPassword = async (email, password) => {
 
   const result = await sendEmail({
     toAddresses: [email],
-    from: process.env.EMAIL_FROM,
+    from: `${process.env.APP_NAME} <${process.env.EMAIL_FROM}>`,
     subject: process.env.EMAIL_SUBJECT,
     htmlBody,
   });
