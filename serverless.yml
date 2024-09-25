@@ -19,7 +19,7 @@ provider:
         - Effect: 'Allow'
           Action:
             - 'dynamodb:PutItem'
-            - 'dynamodb:GetItem'
+            - 'dynamodb:Query'
             - 'dynamodb:DeleteItem'
           Resource:
             - !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${env:DB_TABLE}'
@@ -36,6 +36,12 @@ functions:
     events:
       - http:
           path: generate-password
+          method: post
+  validate-password:
+    handler: services/validate-password/app.handler
+    events:
+      - http:
+          path: validate-password
           method: post
 
 resources:
