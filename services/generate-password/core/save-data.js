@@ -1,8 +1,9 @@
 const db = require('../../../libs/db-helper');
+const { getCompoundKey } = require('../../../libs/token-helper');
 
 module.exports.saveData = async (email, password, token) => {
   const data = {
-    pk: `1TimePass_${token}-${password}`,
+    pk: getCompoundKey(token, password),
     email,
     expiresAt: new Date().getTime() + process.env.EXPIRE_MINUTES * 60 * 1000,
   };
