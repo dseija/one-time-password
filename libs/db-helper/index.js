@@ -26,4 +26,21 @@ const addRecord = async (tableName, recordData) => {
   return result;
 };
 
-module.exports = { getDbClient, addRecord };
+const getRecords = async (tableName, key, value) => {
+  let result;
+  try {
+    result = await getDbClient().query({
+      ExpressionAttributeValues: {
+        [`:${key}`]: value,
+      },
+      KeyConditionExpression: `${key} = :${key}`,
+      TableName: tableName,
+    });
+  } catch (e) {
+    logger.log(e.stack, 'error');
+  }
+
+  return result;
+};
+
+module.exports = { getDbClient, addRecord, getRecords };
