@@ -6,7 +6,7 @@ const MESSAGE = {
 };
 
 const CONFIG = {
-  PASSWORD_LENGTH: 8,
+  PASSWORD_LENGTH: 6,
   TOKEN_LENGTH: 32,
 };
 
